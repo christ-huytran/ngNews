@@ -9,7 +9,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       controller: 'MainCtrl'
     })
     .state('posts', {
-      url: '/posts/{id}',
+      url: '/posts/:id',
       templateUrl: '/posts.html',
       controller: 'PostsCtrl'
     })
@@ -36,6 +36,7 @@ app.controller('MainCtrl', ['$scope', 'posts', function($scope, posts){
     $scope.posts.push({
       title: $scope.title,
       link: $scope.link,
+      comments: [],
       upvotes: 0
     });
     $scope.title = '';
@@ -46,3 +47,22 @@ app.controller('MainCtrl', ['$scope', 'posts', function($scope, posts){
     post.upvotes += 1;
   };
 }]);
+
+
+app.controller('PostsCtrl', ['$scope', '$stateParams', 'posts', function($scope, $stateParams, posts) {
+
+  $scope.post = posts.posts[$stateParams.id];
+
+  $scope.addComment = function(){
+    if($scope.body === '') { return; }
+    $scope.post.comments.push({
+      body: $scope.body,
+      author: 'user',
+      upvotes: 0
+    });
+    $scope.body = '';
+  };
+
+}])
+
+
